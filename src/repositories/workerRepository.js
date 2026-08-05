@@ -5,7 +5,7 @@ class WorkerRepository {
     return await Worker.findOneAndUpdate(
       { workerId: workerData.workerId },
       workerData,
-      { new: true, upsert: true }
+      { returnDocument: 'after', upsert: true }
     );
   }
 
@@ -13,7 +13,7 @@ class WorkerRepository {
     return await Worker.findOneAndUpdate(
       { workerId },
       { lastHeartbeat: Date.now(), status: 'online' },
-      { new: true }
+      { returnDocument: 'after' }
     );
   }
 

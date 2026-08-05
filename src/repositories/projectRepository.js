@@ -18,7 +18,7 @@ class ProjectRepository {
     return await Project.findByIdAndUpdate(
       projectId,
       { $addToSet: { members: userId } },
-      { new: true }
+      { returnDocument: 'after' }
     );
   }
 
@@ -26,7 +26,7 @@ class ProjectRepository {
     return await Project.findByIdAndUpdate(
       projectId,
       { $pull: { members: userId } },
-      { new: true }
+      { returnDocument: 'after' }
     );
   }
 
@@ -34,7 +34,7 @@ class ProjectRepository {
     return await User.findByIdAndUpdate(
       userId,
       { $addToSet: { joinedProjects: projectId } },
-      { new: true }
+      { returnDocument: 'after' }
     );
   }
 
@@ -42,7 +42,7 @@ class ProjectRepository {
     return await User.findByIdAndUpdate(
       userId,
       { $pull: { joinedProjects: projectId } },
-      { new: true }
+      { returnDocument: 'after' }
     );
   }
 }

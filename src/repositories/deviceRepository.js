@@ -6,7 +6,7 @@ class DeviceRepository {
     return await DeviceToken.findOneAndUpdate(
       { token },
       { userId, token, platform },
-      { new: true, upsert: true }
+      { returnDocument: 'after', upsert: true }
     );
   }
 

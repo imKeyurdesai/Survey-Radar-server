@@ -21,7 +21,7 @@ class SurveyService {
       // It's a new survey, trigger notification
       const notificationService = require('./notificationService');
       notificationService.sendSurveyAlert(projectId, survey).catch(console.error);
-      return { isNew: true, survey };
+      return { isreturnDocument: 'after', survey };
     } else {
       // It was a duplicate
       return { isNew: false, survey: null };
