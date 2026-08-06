@@ -1,10 +1,11 @@
 const workerRepository = require('../repositories/workerRepository');
 
 class WorkerService {
-  async registerWorker(workerId, projectId, browser, version) {
+  async registerWorker(workerId, projectId, name, browser, version) {
     const worker = await workerRepository.register({
       workerId,
       projectId,
+      name,
       browser,
       version,
       status: 'online',
@@ -13,8 +14,8 @@ class WorkerService {
     return worker;
   }
 
-  async processHeartbeat(workerId) {
-    return await workerRepository.updateHeartbeat(workerId);
+  async processHeartbeat(workerId, name) {
+    return await workerRepository.updateHeartbeat(workerId, name);
   }
 
   async getProjectWorkers(projectId) {

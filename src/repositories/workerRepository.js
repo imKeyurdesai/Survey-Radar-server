@@ -9,10 +9,14 @@ class WorkerRepository {
     );
   }
 
-  async updateHeartbeat(workerId) {
+  async updateHeartbeat(workerId, name) {
+    const updateData = { lastHeartbeat: Date.now(), status: 'online' };
+    if (name !== undefined) {
+      updateData.name = name;
+    }
     return await Worker.findOneAndUpdate(
       { workerId },
-      { lastHeartbeat: Date.now(), status: 'online' },
+      updateData,
       { returnDocument: 'after' }
     );
   }

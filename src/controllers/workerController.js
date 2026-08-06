@@ -8,7 +8,7 @@ exports.registerWorker = async (req, res, next) => {
   }
 
   try {
-    const { workerId, projectId: incomingProjectId, browser, version } = req.body;
+    const { workerId, projectId: incomingProjectId, name, browser, version } = req.body;
     
     const Project = require('../models/Project');
     let project = await Project.findOne({ joinCode: incomingProjectId });
@@ -19,7 +19,7 @@ exports.registerWorker = async (req, res, next) => {
       return res.status(404).json({ success: false, error: 'Project not found' });
     }
     
-    const worker = await workerService.registerWorker(workerId, project._id, browser, version);
+    const worker = await workerService.registerWorker(workerId, project._id, name, browser, version);
     res.status(200).json({ success: true, data: worker });
   } catch (error) {
     next(error);
@@ -28,11 +28,11 @@ exports.registerWorker = async (req, res, next) => {
 
 exports.heartbeat = async (req, res, next) => {
   try {
-    const { workerId } = req.body;
+    const { workerId, name } = req.body;
     if (!workerId) {
       return res.status(400).json({ success: false, error: 'Worker ID is required' });
     }
-    await workerService.processHeartbeat(workerId);
+    await workerService.processHeartbeat(workerId, name);
     res.status(200).json({ success: true, message: 'Heartbeat received' });
   } catch (error) {
     next(error);

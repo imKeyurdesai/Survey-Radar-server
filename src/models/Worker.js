@@ -11,6 +11,9 @@ const workerSchema = new mongoose.Schema({
     ref: 'Project',
     required: true
   },
+  name: {
+    type: String
+  },
   status: {
     type: String,
     enum: ['online', 'offline'],
