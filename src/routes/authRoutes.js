@@ -1,5 +1,6 @@
 const express = require('express');
-const { registerUser, loginUser } = require('../controllers/authController');
+const { registerUser, loginUser, updateProfile, deleteAccount } = require('../controllers/authController');
+const { protect } = require('../middlewares/authMiddleware');
 const { check } = require('express-validator');
 
 const router = express.Router();
@@ -22,5 +23,16 @@ router.post(
   ],
   loginUser
 );
+
+router.put(
+  '/profile',
+  protect,
+  [
+    check('email', 'Please include a valid email').optional().isEmail()
+  ],
+  updateProfile
+);
+
+router.delete('/profile', protect, deleteAccount);
 
 module.exports = router;

@@ -25,6 +25,10 @@ const userSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: 'Project'
   }],
+  notificationSound: {
+    type: String,
+    default: 'default'
+  },
   createdAt: {
     type: Date,
     default: Date.now

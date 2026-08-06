@@ -36,3 +36,30 @@ exports.loginUser = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.updateProfile = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ success: false, errors: errors.array() });
+  }
+
+  try {
+    const { name, email, notificationSound } = req.body;
+    const userData = await authService.updateProfile(req.user.id, name, email, notificationSound);
+    res.status(200).json({ success: true, data: userData });
+  } catch (error) {
+    if (error.message === 'Email already in use') {
+      res.status(400);
+    }
+    next(error);
+  }
+};
+
+exports.deleteAccount = async (req, res, next) => {
+  try {
+    await authService.deleteAccount(req.user.id);
+    res.status(200).json({ success: true, message: 'Account deleted successfully' });
+  } catch (error) {
+    next(error);
+  }
+};

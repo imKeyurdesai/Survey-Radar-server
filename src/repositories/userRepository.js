@@ -12,6 +12,14 @@ class UserRepository {
   async findById(id) {
     return await User.findById(id);
   }
+
+  async update(id, updateData) {
+    return await User.findByIdAndUpdate(id, updateData, { new: true }).select('-password');
+  }
+
+  async delete(id) {
+    return await User.findByIdAndDelete(id);
+  }
 }
 
 module.exports = new UserRepository();

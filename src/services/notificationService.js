@@ -1,6 +1,7 @@
 const { Expo } = require('expo-server-sdk');
 const DeviceToken = require('../models/DeviceToken');
 const Project = require('../models/Project');
+const User = require('../models/User');
 
 let expo = new Expo();
 
@@ -14,8 +15,14 @@ class NotificationService {
         return;
       }
       
-      // Get all device tokens for the owner and members
       const userIds = [project.ownerId, ...project.members];
+      
+      const users = await User.find({ _id: { $in: userIds } });
+      const soundMap = {};
+      users.forEach(u => {
+        soundMap[u._id.toString()] = u.notificationSound || 'default';
+      });
+
       const tokens = await DeviceToken.find({ userId: { $in: userIds } });
       
       if (tokens.length === 0) return;
@@ -27,9 +34,14 @@ class NotificationService {
           continue;
         }
 
+        const userSound = soundMap[deviceToken.userId.toString()] || 'default';
+        const channelId = userSound === 'default' ? 'default' : `sound-${userSound.replace('.mp3', '')}`;
+        const iosSound = userSound === 'default' ? 'default' : userSound;
+
         messages.push({
           to: deviceToken.token,
-          sound: 'default',
+          sound: iosSound,
+          channelId: channelId,
           title: '🔥 New Survey Available!',
           body: `${survey.title} - Reward: ${survey.reward} (${survey.estimatedTime})`,
           data: { surveyId: survey.surveyId, projectId: projectId },
