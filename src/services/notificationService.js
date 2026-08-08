@@ -8,7 +8,6 @@ let expo = new Expo();
 class NotificationService {
   async sendSurveyAlert(projectId, survey) {
     try {
-      // Find the project to identify the owner
       const project = await Project.findById(projectId);
       if (!project) {
         console.warn('Project not found for notification:', projectId);
@@ -35,15 +34,21 @@ class NotificationService {
         }
 
         const userSound = soundMap[deviceToken.userId.toString()] || 'default';
-        const channelId = userSound === 'default' ? 'default' : `sound-${userSound.replace('.mp3', '')}`;
-        const iosSound = userSound === 'default' ? 'default' : userSound;
+        
+        // Android: channelId must match the channel registered on the device
+        // "default" -> channel "default", custom -> channel "sound-<resourceName>"
+        const channelId = userSound === 'default' ? 'default' : `sound-${userSound}`;
+        
+        // iOS: sound field is the filename. For custom sounds bundled via expo-notifications plugin,
+        // pass the resource name. "default" uses the system default sound.
+        const iosSound = userSound === 'default' ? 'default' : `${userSound}.wav`;
 
         messages.push({
           to: deviceToken.token,
           sound: iosSound,
           channelId: channelId,
           title: '🔥 New Survey Available!',
-          body: `${survey.title} - Reward: ${survey.reward} (${survey.estimatedTime})`,
+          body: `Reward: ${survey.reward}$ - (${survey.estimatedTime})`,
           data: { surveyId: survey.surveyId, projectId: projectId },
         });
       }
