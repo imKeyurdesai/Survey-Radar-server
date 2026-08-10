@@ -5,9 +5,6 @@ class DeviceService {
     return await deviceRepository.registerToken(userId, token, platform);
   }
 
-  async getNotificationHistory(userId) {
-    return await deviceRepository.getHistory(userId);
-  }
 }
 
 module.exports = new DeviceService();

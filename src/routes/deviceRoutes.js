@@ -1,5 +1,5 @@
 const express = require('express');
-const { registerDevice, getNotificationHistory } = require('../controllers/deviceController');
+const { registerDevice } = require('../controllers/deviceController');
 const { protect } = require('../middlewares/authMiddleware');
 const { check } = require('express-validator');
 
@@ -16,6 +16,5 @@ router.post(
   registerDevice
 );
 
-router.get('/notifications/history', getNotificationHistory);
 
 module.exports = router;
