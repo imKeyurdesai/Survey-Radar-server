@@ -16,11 +16,3 @@ exports.registerDevice = async (req, res, next) => {
   }
 };
 
-exports.getNotificationHistory = async (req, res, next) => {
-  try {
-    const history = await deviceService.getNotificationHistory(req.user._id);
-    res.status(200).json({ success: true, data: history });
-  } catch (error) {
-    next(error);
-  }
-};
