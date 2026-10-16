@@ -28,7 +28,8 @@ router.put(
   '/profile',
   protect,
   [
-    check('email', 'Please include a valid email').optional().isEmail()
+    check('email', 'Please include a valid email').optional().isEmail(),
+    check('minNotificationPriority', 'Invalid notification priority').optional().isIn(['all', 'medium', 'high', 'none'])
   ],
   updateProfile
 );

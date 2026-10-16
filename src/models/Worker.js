@@ -21,7 +21,8 @@ const workerSchema = new mongoose.Schema({
   },
   lastHeartbeat: {
     type: Date,
-    default: Date.now
+    default: Date.now,
+    expires: 604800 // Automatically delete worker document after 7 days of inactivity (7 * 24 * 60 * 60 seconds)
   },
   browser: {
     type: String

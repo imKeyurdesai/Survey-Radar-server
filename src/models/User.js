@@ -29,6 +29,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: 'default'
   },
+  minNotificationPriority: {
+    type: String,
+    enum: ['all', 'medium', 'high', 'none'],
+    default: 'all'
+  },
   createdAt: {
     type: Date,
     default: Date.now

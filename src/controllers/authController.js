@@ -44,8 +44,8 @@ exports.updateProfile = async (req, res, next) => {
   }
 
   try {
-    const { name, email, notificationSound } = req.body;
-    const userData = await authService.updateProfile(req.user.id, name, email, notificationSound);
+    const { name, email, notificationSound, minNotificationPriority } = req.body;
+    const userData = await authService.updateProfile(req.user.id, name, email, notificationSound, minNotificationPriority);
     res.status(200).json({ success: true, data: userData });
   } catch (error) {
     if (error.message === 'Email already in use') {

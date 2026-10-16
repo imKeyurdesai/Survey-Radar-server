@@ -19,6 +19,11 @@ class WorkerService {
   }
 
   async getProjectWorkers(projectId) {
+    // Purge workers that have been offline for more than 1 week (7 days)
+    const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+    const cutoffDate = new Date(Date.now() - ONE_WEEK_MS);
+    await workerRepository.deleteInactiveWorkers(cutoffDate);
+
     const workers = await workerRepository.getWorkersByProject(projectId);
     
     // Determine status dynamically based on lastHeartbeat

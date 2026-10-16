@@ -20,6 +20,8 @@ class AuthService {
         _id: user._id,
         name: user.name,
         email: user.email,
+        notificationSound: user.notificationSound || 'default',
+        minNotificationPriority: user.minNotificationPriority || 'all',
         token: generateToken(user._id)
       };
     } else {
@@ -35,6 +37,8 @@ class AuthService {
         _id: user._id,
         name: user.name,
         email: user.email,
+        notificationSound: user.notificationSound || 'default',
+        minNotificationPriority: user.minNotificationPriority || 'all',
         token: generateToken(user._id)
       };
     } else {
@@ -42,7 +46,7 @@ class AuthService {
     }
   }
 
-  async updateProfile(userId, name, email, notificationSound) {
+  async updateProfile(userId, name, email, notificationSound, minNotificationPriority) {
     const user = await userRepository.findById(userId);
     if (!user) throw new Error('User not found');
 
@@ -60,6 +64,10 @@ class AuthService {
       updateData.notificationSound = notificationSound;
     }
 
+    if (minNotificationPriority !== undefined) {
+      updateData.minNotificationPriority = minNotificationPriority;
+    }
+
     const updatedUser = await userRepository.update(userId, updateData);
     
     return {
@@ -67,6 +75,7 @@ class AuthService {
       name: updatedUser.name,
       email: updatedUser.email,
       notificationSound: updatedUser.notificationSound,
+      minNotificationPriority: updatedUser.minNotificationPriority,
       token: generateToken(updatedUser._id) // Issue a new token just in case
     };
   }

@@ -24,6 +24,15 @@ class WorkerRepository {
   async getWorkersByProject(projectId) {
     return await Worker.find({ projectId });
   }
+
+  async deleteInactiveWorkers(cutoffDate) {
+    return await Worker.deleteMany({
+      $or: [
+        { lastHeartbeat: { $lt: cutoffDate } },
+        { lastHeartbeat: { $exists: false }, createdAt: { $lt: cutoffDate } }
+      ]
+    });
+  }
 }
 
 module.exports = new WorkerRepository();
